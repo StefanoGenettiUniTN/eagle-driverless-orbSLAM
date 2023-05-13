@@ -23,6 +23,7 @@ orbslam2/Examples/ROS/ORB_SLAM2/build/
 orbslam2/Examples/Stereo/stereo_euroc
 orbslam2/Examples/Stereo/stereo_kitti
 orbslam2/KeyFrameTrajectory.txt
+orbslam2/CameraTrajectory.txt
 orbslam2/Thirdparty/DBoW2/build/
 orbslam2/Thirdparty/DBoW2/lib/
 orbslam2/Thirdparty/g2o/build/
