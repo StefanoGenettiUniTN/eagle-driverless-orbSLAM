@@ -133,7 +133,10 @@ void Map::clear()
 void Map::Save(const string& filename){
     //Print the information of the saving map
     cout<<"Map.cc :: Map Saving to "<<filename<<endl;
+    
     ofstream f;
+    ofstream logFile("mapSave.log");    //nota: in this file we write the saved map in a human readable format
+
     f.open(filename.c_str(), ios_base::out|ios::binary);    //nota:
                                                             //c_str() => std::string, string.c_str() is introduced to be able to convert from std::string to const char* (a C-style string)
                                                             //ios_base::out|ios::binary, is a bitwise OR of two flags:
@@ -143,12 +146,19 @@ void Map::Save(const string& filename){
     //Number of MapPoints
     unsigned long int nMapPoints = mspMapPoints.size();
     f.write((char*)&nMapPoints, sizeof(nMapPoints));    //nota: write the number of map points
+    
+    logFile<<"number of map points: "<<nMapPoints<<endl<<endl;
 
     //Save MapPoint sequentially
     for(auto mp: mspMapPoints){
+        
+        logFile<<"- saving point number: "<<mp->mnId<<endl;
+
         //Save MapPoint
-        SaveMapPoint(f, mp);
+        SaveMapPoint(f, mp, logFile);
         cout<<"Map.cc :: Saving point number: "<<mp->mnId<<endl;
+
+        logFile<<endl;
     }
 
     //Print the number of MapPoints
@@ -160,24 +170,37 @@ void Map::Save(const string& filename){
     //Print the number of KeyFrames
     cout<<"Map.cc :: The number of KeyFrames:"<<mspKeyFrames.size()<<endl;
     
+    logFile<<"number of key frames: "<<mspKeyFrames.size()<<endl<<endl;
+
     //Number of KeyFrames
     unsigned long int nKeyFrames = mspKeyFrames.size();
     f.write((char*)&nKeyFrames, sizeof(nKeyFrames));
 
     //Save KeyFrames sequentially
     for(auto kf : mspKeyFrames){
-        SaveKeyFrame(f, kf);
+        logFile<<"- saving keyframe number: "<<kf->mnId<<" [ timestamp"<<kf->mTimeStamp<<" ]"<<endl;
+        SaveKeyFrame(f, kf, logFile);
+        logFile<<endl;
     }
 
+    logFile<<"keyframes covisibility graph"<<endl<<endl;
+
     for(auto kf : mspKeyFrames){
+
+        logFile<<"keyframe: "<<kf->mnId<<endl;
+
         //Get parent of current KeyFrame and save the ID of this parent
         KeyFrame* parent = kf->GetParent();
         unsigned long int parent_id = ULONG_MAX;
         if(parent){
             parent_id = parent->mnId;
+            logFile<<"- parent: "<<parent_id<<endl;
         }
-        f.write((char*)&parent_id, sizeof(parent_id));
-
+        f.write((char*)&parent_id, sizeof(parent_id));  //TODO: secondo me è meglio mettere questa riga nell'if
+                                                        //altrimenti vengono fuori porcate tipo:
+                                                        //keyframe: 0
+                                                        //- parent: 18446744073709551615
+        
         //Get the size of the Connected KeyFrames of the current KeyFrames
         //and then save the ID and weight of the Connected KeyFrames
         unsigned long int nb_con = kf->GetConnectedKeyFrames().size();
@@ -186,34 +209,44 @@ void Map::Save(const string& filename){
             int weight = kf->GetWeight(ckf);
             f.write((char*)&ckf->mnId, sizeof(ckf->mnId));
             f.write((char*)&weight, sizeof(weight));
+
+            logFile<<"- connected to "<<ckf->mnId<<" weight: "<<weight<<endl;
         }
+
+        logFile<<"---"<<endl;
     }
     
     f.close();
+    logFile.close();
     cout<<"Map.cc :: Map Saving Finished!"<<endl;
 }
 
 
 
-void Map::SaveMapPoint(ofstream& f, MapPoint* mp){
+void Map::SaveMapPoint(ofstream& f, MapPoint* mp, ofstream& logFile){
     //Save ID and the x,y,z coordinates of the current MapPoint
     f.write((char*)&mp->mnId, sizeof(mp->mnId));
     cv::Mat mpWorldPos = mp->GetWorldPos();
     f.write((char*)& mpWorldPos.at<float>(0),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(1),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(2),sizeof(float));
+
+    logFile<<"-- "<<mpWorldPos<<endl;
+
 }
 
 
 
-void Map::SaveKeyFrame(ofstream& f, KeyFrame* kf){
+void Map::SaveKeyFrame(ofstream& f, KeyFrame* kf, ofstream& logFile){
     //Save the ID and timestamp of the current KeyFrame
     f.write((char*)&kf->mnId, sizeof(kf->mnId));
-    cout<<"saving kf->mnId = "<<kf->mnId<<endl;
+    //cout<<"saving kf->mnId = "<<kf->mnId<<endl;
     f.write((char*)&kf->mTimeStamp, sizeof(kf->mTimeStamp));
     
     //Save the Pose Matrix of current KeyFrame
     cv::Mat Tcw = kf->GetPose();
+
+    logFile<<"-- "<<"pose matrix: "<<Tcw<<endl;
 
     //Save the rotation matrix in Quaternion
     std::vector<float> Quat = Converter::toQuaternion(Tcw);
@@ -227,7 +260,8 @@ void Map::SaveKeyFrame(ofstream& f, KeyFrame* kf){
     }
 
     //Save the size of the ORB features current KeyFrame
-    cout<<"kf->N: "<<kf->N<<endl;
+    //cout<<"kf->N: "<<kf->N<<endl;
+    logFile<<"-- "<<"number of ORB features (N): "<<kf->N<<endl;
     f.write((char*)&kf->N, sizeof(kf->N));
 
     //Save each ORB features
@@ -240,6 +274,13 @@ void Map::SaveKeyFrame(ofstream& f, KeyFrame* kf){
         f.write((char*)&kp.response, sizeof(kp.response));
         f.write((char*)&kp.octave, sizeof(kp.octave));
 
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint x: "<<kp.pt.x<<endl;
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint y: "<<kp.pt.y<<endl;
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint size: "<<kp.size<<endl;
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint angle: "<<kp.angle<<endl;
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint response: "<<kp.response<<endl;
+        logFile<<"--- "<<"[feature point"<<i<<"] keypoint octave: "<<kp.octave<<endl;
+
         //Save the Descriptors of current ORB features
         f.write((char*)&kf->mDescriptors.cols, sizeof(kf->mDescriptors.cols));  //kf->mDescriptors.cols is always 32 here.
         for(int j=0; j<kf->mDescriptors.cols; j++){
@@ -251,8 +292,10 @@ void Map::SaveKeyFrame(ofstream& f, KeyFrame* kf){
         MapPoint* mp = kf->GetMapPoint(i);
         if(mp==NULL){
             mnIdx = ULONG_MAX;
+            logFile<<"--- "<<"[feature point"<<i<<"] corresponding map point index: unknown"<<endl;
         }else{
             mnIdx = mmpnMapPointsIdx[mp];
+            logFile<<"--- "<<"[feature point"<<i<<"] corresponding map point index: "<<mnIdx<<endl;
         }
 
         f.write((char*)&mnIdx, sizeof(mnIdx));

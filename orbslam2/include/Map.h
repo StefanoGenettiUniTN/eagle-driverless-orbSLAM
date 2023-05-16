@@ -74,8 +74,8 @@ public:
         methods for map save process
     */
     void Save(const string &filename);
-    void SaveMapPoint(ofstream& f, MapPoint* mp);
-    void SaveKeyFrame(ofstream& f, KeyFrame* kf);
+    void SaveMapPoint(ofstream& f, MapPoint* mp, ofstream& logFile);
+    void SaveKeyFrame(ofstream& f, KeyFrame* kf, ofstream& logFile);
     void GetMapPointsIdx();
 
 protected:
