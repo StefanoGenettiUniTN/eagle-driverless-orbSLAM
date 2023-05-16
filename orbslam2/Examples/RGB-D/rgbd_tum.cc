@@ -200,7 +200,13 @@ int main(int argc, char **argv)
     // This method works for all sensor input.
     // See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset
     */
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");   
+    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+
+    /*nota:
+        With the following function we save the map in a file as proposed
+        by ProgrammerAll webpage: https://www.programmerall.com/article/18761312556/
+    */   
+    SLAM.SaveMap("MyMap.bin");
 
     return 0;
 }

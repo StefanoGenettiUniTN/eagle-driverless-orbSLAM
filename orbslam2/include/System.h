@@ -23,6 +23,7 @@
 #define SYSTEM_H
 
 #include<string>
+#include<unistd.h>
 #include<thread>
 #include<opencv2/core/core.hpp>
 
@@ -112,8 +113,10 @@ public:
     // See format details at: http://www.cvlibs.net/datasets/kitti/eval_odometry.php
     void SaveTrajectoryKITTI(const string &filename);
 
-    // TODO: Save/Load functions
-    // SaveMap(const string &filename);
+    //nota: Save the map in the specified input filename
+    void SaveMap(const string &filename);
+
+    // TODO: Load functions
     // LoadMap(const string &filename);
 
     // Information from most recent processed frame

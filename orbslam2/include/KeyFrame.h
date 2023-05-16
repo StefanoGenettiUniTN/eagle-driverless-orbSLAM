@@ -85,8 +85,8 @@ public:
     void EraseMapPointMatch(const size_t &idx);
     void EraseMapPointMatch(MapPoint* pMP);
     void ReplaceMapPointMatch(const size_t &idx, MapPoint* pMP);
-    std::set<MapPoint*> GetMapPoints();
-    std::vector<MapPoint*> GetMapPointMatches();
+    std::set<MapPoint*> GetMapPoints();             //nota: return mvpMapPoints --> MapPoints associated to keypoints
+    std::vector<MapPoint*> GetMapPointMatches();    //nota: //nota: return mvpMapPoints[idx] --> MapPoint associated to keypoints idx
     int TrackedMapPoints(const int &minObs);
     MapPoint* GetMapPoint(const size_t &idx);
 

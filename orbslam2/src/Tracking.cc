@@ -458,6 +458,9 @@ void Tracking::Track()
             else
                 mVelocity = cv::Mat();
 
+            /*nota:
+                update camera pose in the plot
+            */
             mpMapDrawer->SetCurrentCameraPose(mCurrentFrame.mTcw);
 
             // Clean VO matches
@@ -558,7 +561,7 @@ void Tracking::StereoInitialization()
                 MapPoint* pNewMP = new MapPoint(x3D,pKFini,mpMap);
                 pNewMP->AddObservation(pKFini,i);
                 pKFini->AddMapPoint(pNewMP,i);  //nota: each keyframe has a vector of MapPoints associated to keypoints
-                pNewMP->ComputeDistinctiveDescriptors();
+                pNewMP->ComputeDistinctiveDescriptors();    // nota: best descriptor to fast matching
                 pNewMP->UpdateNormalAndDepth();
                 mpMap->AddMapPoint(pNewMP);
 
@@ -587,6 +590,9 @@ void Tracking::StereoInitialization()
 
         mpMap->mvpKeyFrameOrigins.push_back(pKFini);
 
+        /*nota:
+            update camera pose in the plot
+        */
         mpMapDrawer->SetCurrentCameraPose(mCurrentFrame.mTcw);
 
         mState=OK;

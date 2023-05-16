@@ -89,6 +89,23 @@ cv::Mat Converter::toCvMat(const Eigen::Matrix<double,3,1> &m)
     return cvMat.clone();
 }
 
+/*nota:
+    Added in order to implement saveMap method.
+    Input: quaternion coordinates as a float vector with four elements
+    Output: open cv rotation matrix in "rotation quaternions format"
+*/
+cv::Mat Converter::toCvMat(const std::vector<float>& v){
+    Eigen::Quaterniond q;
+    q.x() = v[0];
+    q.y() = v[1];
+    q.z() = v[2];
+    q.w() = v[3];
+
+    Eigen::Matrix<double, 3, 3> eigMat(q);
+    cv::Mat M = toCvMat(eigMat);
+    return M;
+}
+
 cv::Mat Converter::toCvSE3(const Eigen::Matrix<double,3,3> &R, const Eigen::Matrix<double,3,1> &t)
 {
     cv::Mat cvMat = cv::Mat::eye(4,4,CV_32F);

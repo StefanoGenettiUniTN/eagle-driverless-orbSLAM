@@ -27,7 +27,11 @@
 
 #include <mutex>
 
-
+/* nota
+    Required libraries to implement saveMap method
+*/
+#include <fstream>
+#include "Converter.h"
 
 namespace ORB_SLAM2
 {
@@ -66,6 +70,14 @@ public:
     // This avoid that two points are created simultaneously in separate threads (id conflict)
     std::mutex mMutexPointCreation;
 
+    /*nota:
+        methods for map save process
+    */
+    void Save(const string &filename);
+    void SaveMapPoint(ofstream& f, MapPoint* mp);
+    void SaveKeyFrame(ofstream& f, KeyFrame* kf);
+    void GetMapPointsIdx();
+
 protected:
     std::set<MapPoint*> mspMapPoints;
     std::set<KeyFrame*> mspKeyFrames;
@@ -78,6 +90,11 @@ protected:
     int mnBigChangeIdx;
 
     std::mutex mMutexMap;
+
+    /*nota:
+    
+    */
+    std::map<MapPoint*, unsigned long int> mmpnMapPointsIdx;
 };
 
 } //namespace ORB_SLAM
