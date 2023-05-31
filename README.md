@@ -6,6 +6,9 @@ The purpose of this branch is to try to execute orbslam2 on a video acquired wit
 
 ## folder structure
 - `realsense-get-started`: contains the basic code to use the realsense library to acquire frames and display both color and depth information. For usage instructions, see the dedicated section below.
+- `orbslam2`: contains the implementation of orbslam2 as proposed in the [official repository](https://github.com/raulmur/ORB_SLAM2), together with:
+  -  the implementation of save map
+  -  meaningful comments to understand the code
 
 ## realsense-get-started
 The folder contains two files: `bag.cc`, `pipeline.cc`. The former is to process a pre-recorder video stream, while the latter is the skeleton code to process an online stream of data.
@@ -23,4 +26,16 @@ In alternative, you can prepare a CMake file.
 Execution:
 ```
 ./a.out
+```
+
+## orbslam2
+### RGBD Example
+1. Download a sequence from http://vision.in.tum.de/data/datasets/rgbd-dataset/download and uncompress it.
+2. Execute the example, type the following. Change `TUMX.yaml` to `TUM1.yaml`, `TUM2.yaml` or `TUM3.yaml` for freiburg1, freiburg2 and freiburg3 sequences respectively. Change `PATH_TO_SEQUENCE_FOLDER` to the uncompressed sequence folder. Change `ASSOCIATIONS_FILE` to the path to the corresponding associations file.
+```
+./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/TUMX.yaml PATH_TO_SEQUENCE_FOLDER ASSOCIATIONS_FILE
+```
+
+```
+./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml Examples/RGB-D/rgbd_dataset_freiburg1_xyz/ Examples/RGB-D/associations/fr1_xyz.txt
 ```
