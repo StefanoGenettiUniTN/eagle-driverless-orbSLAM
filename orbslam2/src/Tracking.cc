@@ -1064,6 +1064,9 @@ bool Tracking::NeedNewKeyFrame()
     if(mSensor==System::MONOCULAR)
         thRefRatio = 0.9f;
 
+    // nota: here the algorithm is checking the conditions to insert a new keyframe
+    // as explained in the original paper
+
     // Condition 1a: More than "MaxFrames" have passed from last keyframe insertion
     const bool c1a = mCurrentFrame.mnId>=mnLastKeyFrameId+mMaxFrames;
     // Condition 1b: More than "MinFrames" have passed and Local Mapping is idle
@@ -1099,6 +1102,7 @@ bool Tracking::NeedNewKeyFrame()
         return false;
 }
 
+// nota: create new keyframe
 void Tracking::CreateNewKeyFrame()
 {
     if(!mpLocalMapper->SetNotStop(true))

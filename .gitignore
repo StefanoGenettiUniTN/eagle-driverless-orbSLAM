@@ -13,6 +13,9 @@ orbslam2/Examples/Monocular/mono_euroc
 orbslam2/Examples/Monocular/mono_kitti
 orbslam2/Examples/Monocular/mono_tum
 orbslam2/Examples/RGB-D/rgbd_tum
+orbslam2/Examples/d455-offline/d455_offline
+orbslam2/Examples/d455-offline/d455_offline1
+orbslam2/Examples/d455-offline/a.out
 orbslam2/Examples/RGB-D/rgbd_dataset_freiburg1_xyz
 orbslam2/Examples/ROS/ORB_SLAM2/CMakeLists.txt.user
 orbslam2/Examples/ROS/ORB_SLAM2/Mono
