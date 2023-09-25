@@ -9,6 +9,11 @@ The purpose of this branch is to try to execute orbslam2 on a video acquired wit
 - `orbslam2`: contains the implementation of orbslam2 as proposed in the [official repository](https://github.com/raulmur/ORB_SLAM2), together with:
   -  the implementation of save map
   -  meaningful comments to understand the code
+- `./Examples/d455-offline/d455_offline1`: code to execute orbslam2 on a video stream acquired with our realsense D455 camera. In order to execute the code type the following:
+```
+./Examples/d455-offline/d455_offline1 Vocabulary/ORBvoc.txt ./Examples/d455-offline/d455_openCV.yaml <path .bag file>
+```
+- `./Examples/d455-offline/d455_offline`: old version of d455_offline1 file. We keep the file for reference but from Sept the 25th we consider d455_offline1 version of the file.
 
 ## realsense-get-started
 The folder contains two files: `bag.cc`, `pipeline.cc`. The former is to process a pre-recorder video stream, while the latter is the skeleton code to process an online stream of data.
