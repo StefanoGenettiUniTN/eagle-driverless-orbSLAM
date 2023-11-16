@@ -24,6 +24,8 @@
 
 #include <System.h>
 
+#include "CameraPose.h"
+
 using namespace std;
 using namespace cv;
 
@@ -144,7 +146,68 @@ int main(int argc, char **argv)
         clock_t tframe = clock();
         std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 
-        SLAM.TrackRGBD(imRGB,imD,tframe);
+        cv::Mat Tcw = SLAM.TrackRGBD(imRGB,imD,tframe);
+        //SLAM.TrackRGBD(imRGB,imD,tframe);
+        
+        /*
+        nota:
+        The output cv::Mat Tcw has been added by me.
+        Indeed before the return value of trackRGBD was simply
+        ignored.
+
+        At the beggining the Txw matrix is the following:
+        [   1, 0, 0, 0
+            0, 1, 0, 0
+            0, 0, 1, 0
+            0, 0, 0, 1
+        ]
+
+        Then it progressively denotes a transformation matrix from the initial pose to the current
+        camera pose
+
+        [   0.99997622,     -0.0034013058,  0.0059955055,   0.0015558163;
+            0.0034244843,   0.99998671,     -0.0038600003,  -0.0079942448;
+            -0.0059822965,  0.0038804403,   0.99997455,     -0.010940595;
+                0,              0,              0,                 1
+        ]
+        */
+        // PRINT CURRENT CAMERA POSE
+        cout<<"Tcw:"<<endl;
+        cout<<Tcw<<endl;
+        cout<<endl;
+
+        // compute camera pose
+        ORB_SLAM2::CameraPose cameraPose = ORB_SLAM2::CameraPose();
+        
+        if(!Tcw.empty()){    // camera pose transformation matrix available
+            cv::Mat Rwc = Tcw.rowRange(0,3).colRange(0,3).t();  // rotation information
+            cv::Mat twc = -Rwc*Tcw.rowRange(0,3).col(3);        // translation information
+            
+            vector<float> q = ORB_SLAM2::Converter::toQuaternion(Rwc);
+            
+            cout<<"Rwc"<<endl;
+            cout<<Rwc<<endl<<endl;
+            
+            cout<<"twc"<<endl;
+            cout<<"x: "<<twc.at<float>(0,0)<<endl;
+            cout<<"y: "<<twc.at<float>(1,0)<<endl;
+            cout<<"z: "<<twc.at<float>(2,0)<<endl;
+            cout<<endl<<endl;
+
+            cout<<"q"<<endl;
+            for (float qi : q)
+                cout << qi << ' ';
+            cout<<endl;
+            
+            // build transformation matrix
+
+
+            
+        }else{      // camera pose transformation matrix not available
+            cout<<"no camera pose transformation matrix available"<<endl;
+        }
+        
+        //...end compute camera pose
 
         std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 
@@ -153,7 +216,7 @@ int main(int argc, char **argv)
         // print tracking time in ms
 		//cout<<"This ttrack use " << ttrack << "ms"<<endl;
 
-        if(cv::waitKey(33)=='q')
+        if(cv::waitKey(1)=='q')    // originally waitKey(33)
            break;
     }
     // Stop all threads

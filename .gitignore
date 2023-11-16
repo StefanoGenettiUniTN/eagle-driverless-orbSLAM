@@ -38,3 +38,4 @@ orbslam2/build/
 orbslam2/*~
 orbslam2/lib/
 settings.json
+orbslam2/mapSave.log
