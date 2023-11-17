@@ -22,8 +22,12 @@ orbslam2/Examples/ROS/ORB_SLAM2/Stereo
 orbslam2/Examples/ROS/ORB_SLAM2/build/
 orbslam2/Examples/Stereo/stereo_euroc
 orbslam2/Examples/Stereo/stereo_kitti
+orbslam2/Examples/d455-offline/a.out
+orbslam2/Examples/d455-offline/d455_offline
+orbslam2/Examples/d455-offline/d455_offline1
 orbslam2/KeyFrameTrajectory.txt
 orbslam2/CameraTrajectory.txt
+orbslam2/mapSave.log
 orbslam2/MyMap.bin
 orbslam2/Thirdparty/DBoW2/build/
 orbslam2/Thirdparty/DBoW2/lib/
@@ -35,3 +39,4 @@ orbslam2/build/
 orbslam2/*~
 orbslam2/lib/
 settings.json
+orbslam2/report/*
