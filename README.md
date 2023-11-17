@@ -1,6 +1,8 @@
 # E-Agle Trento Racing Team Perception System
 ## Simultaneous Localization and Mapping for Formula Student Driverless Race Car
 Within the GitHub repository lies the code for the perception system of the E-Agle Trento racing team's autonomous vehicle. As of November 17th, 2023, the current implementation aims to establish a minimum viable software, serving as a foundational framework that will undergo continuous refinement and enhancement throughout the years.
+![outdoor_dataset](images/IMG_0616.png)
+![infrastructure_scheme](images/infrastructureScheme.png)
 ### Task
 Our primary objective revolves around deploying a robust software solution designed to address the Simultaneous Localization and Mapping problem (SLAM) within the Formula Driverless competition framework. This solution centers on leveraging an RGBD camera sensor, specifically the Intel RealSense D455, to gather environmental data. Thus, the repository in question presents an implementation of Visual SLAM tailored to effectively tackle this challenge.
 ### Branches
