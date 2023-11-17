@@ -63,10 +63,7 @@ orbslam3/report/*
 kf_*.txt
 f_*.txt
 orbslam3/Thirdparty/DBoW2/build/
-orbslam3/Thirdparty/DBoW2/lib/
 orbslam3/Thirdparty/g2o/build/
-orbslam3/Thirdparty/g2o/config.h
-orbslam3/Thirdparty/g2o/lib/
 orbslam3/Vocabulary/ORBvoc.txt
 orbslam3/build/
 
