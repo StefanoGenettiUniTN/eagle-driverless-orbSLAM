@@ -49,7 +49,7 @@ We use modified versions of the [DBoW2](https://github.com/dorian3d/DBoW2) libra
 
 Clone the repository:
 ```
-git clone https://github.com/raulmur/ORB_SLAM2.git ORB_SLAM2
+git clone https://github.com/StefanoGenettiUniTN/eagle-driverless-orbSLAM.git
 ```
 
 We provide a script `build.sh` to build the *Thirdparty* libraries and *ORB-SLAM2*. Please make sure you have installed all required dependencies (see previous section). Execute:
