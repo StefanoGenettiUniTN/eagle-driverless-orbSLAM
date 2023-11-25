@@ -19,6 +19,10 @@ Within this branch, you'll find instructions to execute ORBSLAM2 on a video sequ
 Building upon our exploration of ORBSLAM3, we've expanded our approach by integrating YOLOv8 into the visual SLAM algorithm pipeline. This integration extends our solution by incorporating cone detection and classification, crucial for circuit delineation. Utilizing the Formula SAE's official dataset, we trained YOLOv8 to accurately identify and classify cones that mark the circuit boundaries. The process involves YOLOv8 detecting cones within the video frame and enclosing them within bounding boxes. Subsequently, we filter the ORB features specific to these cones. Extracting the corresponding 3D coordinates from these features provides us with their real-world positioning (x, y, z). Leveraging this data, we construct a live representation of the circuit, continually updated in real-time, using the located cone coordinates.
 ![orbslam3](images/orbslam3.png)
 ![orbslam3-1](images/orbslam3-1.png)
+![cone-classes](images/cone-classes.png)
+![confusion_matrix_normalized](images/confusion_matrix_normalized.png)
+![MaskPR_curve](images/MaskPR_curve.png)
+![val_batch2_labels](images/val_batch2_labels.jpg)
 ### Contributors
 For any questions, feedback, or issues encountered while using this perception system, please open an issue on this repository. Feel free to contact us.
 - Stefano Genetti stefano.genetti@studenti.unitn.it
