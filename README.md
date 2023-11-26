@@ -1,6 +1,3 @@
-# eagle-driverless-orbSLAM
-Computer Vision course project 2023 - Simultaneous Localization and Mapping for Formula Student Driverless Race Car
-
 # Evaluation
 This branch contains the resources used to evaluate and compare the performances of the algorithms under analysis.
 
