@@ -24,7 +24,23 @@ Building upon our exploration of ORBSLAM3, we've expanded our approach by integr
 ![MaskPR_curve](images/MaskPR_curve.png)
 ![val_batch2_labels](images/val_batch2_labels.jpg)
 ### evaluation
-The purpose of this branch is to provide the Python codes which we have implemented in order to process the outcomes of our algorithms and present them in a suitable way. In particular, orbslam2 and orbslam3 return a file camera.csv containing the estimated sequence of coordinates which describe the movement of the agent in the space. Moreover, orbslam3 provides also an additional cones.csv file at the end of the execution. In this latter we store the estimated (x,y,z) coordinates of each cone detected by YOLO. With the scripts made available in this branch we can plot the estimated trajectories of the camera together with the position of the cones which delimit the circuit. 
+The purpose of this branch is to provide the Python codes which we have implemented in order to process the outcomes of our algorithms and present them in a suitable way. In particular, orbslam2 and orbslam3 return a file camera.csv containing the estimated sequence of coordinates which describe the movement of the agent in the space. Moreover, orbslam3 provides also an additional cones.csv file at the end of the execution. In this latter we store the estimated (x,y,z) coordinates of each cone detected by YOLO. With the scripts made available in this branch we can plot the estimated trajectories of the camera together with the position of the cones which delimit the circuit.
+#### dataset povo1-interno
+| OrbSLAM2 | OrbSLAM2 vs. OrbSLAM3 | OrbSLAM3 + Cones detection |
+| --- | --- | --- |
+![](images/povo1-interno_os2.png) | ![](images/povo1-interno_os2-os3.png) | ![](images/povo1-interno_os3-cones.png) |
+#### dataset povo-garage
+| OrbSLAM2 | OrbSLAM2 vs. OrbSLAM3 | OrbSLAM3 + Cones detection |
+| --- | --- | --- |
+![](images/povo-garage_os2.png) | ![](images/povo-garage_os2-os3.png) | ![](images/povo-garage_os3-cones.png) |
+#### dataset lab-otto
+| OrbSLAM2 | OrbSLAM2 vs. OrbSLAM3 | OrbSLAM3 + Cones detection |
+| --- | --- | --- |
+![](images/lab-otto_os2.png) | ![](images/lab-otto_os2-os3.png) | ![](images/lab-otto_os3-cones.png) |
+#### dataset outdoor
+| OrbSLAM2 | OrbSLAM2 vs. OrbSLAM3 | OrbSLAM3 + Cones detection |
+| --- | --- | --- |
+![](images/outdoor_os2.png) | ![](images/outdoor_os2-os3.png) | ![](images/outdoor_os3-cones.png) |
 ### Contributors
 For any questions, feedback, or issues encountered while using this perception system, please open an issue on this repository. Feel free to contact us.
 - Stefano Genetti stefano.genetti@studenti.unitn.it
