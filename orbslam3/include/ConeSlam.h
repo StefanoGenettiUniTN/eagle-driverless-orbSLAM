@@ -24,6 +24,9 @@ public:
     double y;
     double z;
 
+    // LEFT OR RIGHT CONE (0==UNKNOWN ; 1==RIGHT ; 2==LEFT)
+    int left_right;
+
     ConeSlam();
     ConeSlam(double x, double y, double z, int class_id);
 

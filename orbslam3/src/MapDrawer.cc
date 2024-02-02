@@ -219,6 +219,15 @@ void MapDrawer::DrawCones(std::vector<Eigen::Vector3f> cones, Circuit* circuit, 
 
     for (ConeSlam* cone : circuit->cones) {
         if(cone->getHitCounter()>5){
+            
+            // GET CONE COORDINATES WITH RESPECT TO CAMERA REFERENCE SYSTEM
+            Eigen::Matrix<float,4,4> Twc_inverse = mCameraPose.matrix().inverse();
+            double cone_camera_x = Twc_inverse(0,0)*cone->getX() + Twc_inverse(0,1)*cone->getY() + Twc_inverse(0,2)*cone->getZ() + Twc_inverse(0,3);
+            double cone_camera_y = Twc_inverse(1,0)*cone->getX() + Twc_inverse(1,1)*cone->getY() + Twc_inverse(1,2)*cone->getZ() + Twc_inverse(1,3);
+            double cone_camera_z = Twc_inverse(2,0)*cone->getX() + Twc_inverse(2,1)*cone->getY() + Twc_inverse(2,2)*cone->getZ() + Twc_inverse(2,3);
+
+            // Change cone color according to the class
+            /*
             if (cone->class_id == 0) {  // BLUE
                 glColor3f(0.0, 0.0, 1.0); // Blue color
             } else if (cone->class_id == 1) {    // LARGE ORANGE
@@ -230,6 +239,26 @@ void MapDrawer::DrawCones(std::vector<Eigen::Vector3f> cones, Circuit* circuit, 
             } else if (cone->class_id == 4) {    // YELLOW
                 glColor3f(1.0, 1.0, 0.0); // Yellow color
             }
+            */
+
+            // Change cone color according to LEFT or RIGHT
+            if(cone_camera_z>0){    // CONE IS IN FRONT OF THE CAMERA
+                if(cone_camera_x>0){    // RIGHT
+                    glColor3f(0.0, 0.0, 1.0);
+                    cone->left_right = 1;
+                }else{  // LEFT
+                    glColor3f(1.0, 1.0, 0.0);
+                    cone->left_right = 2;
+                }
+            }else{  // CONE IS NOT IN FRONT OF THE CAMERA then keep same color as before
+                if(cone->left_right==1){
+                    glColor3f(0.0, 0.0, 1.0);
+                }else{
+                    glColor3f(1.0, 1.0, 0.0);
+                }
+            }
+
+            // Draw cone
             glVertex3f(cone->getX(),cone->getY(),cone->getZ());
         }
     }

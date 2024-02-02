@@ -7,9 +7,9 @@
 namespace ORB_SLAM3
 {
 
-ConeSlam::ConeSlam(): hit_counter(0){}
+ConeSlam::ConeSlam(): hit_counter(0), left_right(0){}
 
-ConeSlam::ConeSlam(double x, double y, double z, int class_id): x(x), y(y), z(z), class_id(class_id), hit_counter(0){}
+ConeSlam::ConeSlam(double x, double y, double z, int class_id): x(x), y(y), z(z), class_id(class_id), hit_counter(0), left_right(0){}
 
 // Getter methods
 int ConeSlam::getClassId() const {
