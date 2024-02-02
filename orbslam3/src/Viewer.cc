@@ -28,13 +28,14 @@
 namespace ORB_SLAM3
 {
 
-Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings, const string &log_cone_file_path):
+Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings, const string &log_cone_file_path, const string &log_circuit_file_path):
     both(false), mpSystem(pSystem), mpFrameDrawer(pFrameDrawer),mpMapDrawer(pMapDrawer), mpTracker(pTracking),
     mbFinishRequested(false), mbFinished(true), mbStopped(true), mbStopRequested(false)
 {
     /*
     Parameters:
         * const string &log_cone_file_path :: output csv file where we store the coordinates of the cones    
+        * const string &log_circuit_file_path :: output csv file where we store the coordinates of the clustered cones    
     */
     if(settings){
         newParameterLoader(settings);
@@ -77,6 +78,10 @@ Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer
     log_cone_csv_file<<"timestamp"<<","<<"x"<<","<<"y"<<","<<"z"<<"\n"; 
     // =========================================================================
 
+    // ===OPEN CLUSTER CONE COORDINATES LOG FILE======================== 
+    log_cluster_cone_csv_file.open(log_circuit_file_path);
+    log_cluster_cone_csv_file<<"id"<<","<<"class"<<","<<"x"<<","<<"y"<<","<<"z"<<"\n"; 
+    // =================================================================
 }
 
 void Viewer::newParameterLoader(Settings *settings) {
@@ -331,7 +336,6 @@ void Viewer::Run()
             menuStep = false;
         }
 
-
         d_cam.Activate(s_cam);
         glClearColor(1.0f,1.0f,1.0f,1.0f);
         mpMapDrawer->DrawCurrentCamera(Twc);    // <--
@@ -346,54 +350,11 @@ void Viewer::Run()
         cv::Mat im = mpFrameDrawer->DrawFrame(inf, trackedImageScale); // <--
 
         if(menuShowCones){
-            mpMapDrawer->DrawCones(mpFrameDrawer->cones, &log_cone_csv_file);
+            //mpMapDrawer->DrawCones(mpFrameDrawer->cones, &log_cone_csv_file); // draw only updated cones
+            mpMapDrawer->DrawCones(mpFrameDrawer->cones, &(mpFrameDrawer->circuit), &log_cone_csv_file);
         }
 
         pangolin::FinishFrame();
-
-        // EXECUTE YOLO ON THE VIEWER FRAME
-        /*
-        cv::Mat yolo_frame;
-        cv::cvtColor(im, yolo_frame, cv::COLOR_BGR2RGB);
-        cv::resize(yolo_frame, yolo_frame, cv::Size(640, 480));
-
-        std::vector<YOLO::Detection> output = inf->runInference(yolo_frame);
-
-        int detections = output.size();
-        cout<<"Number of detections: "<<detections<<endl;
-
-        for (int i=0; i<detections; ++i){
-            YOLO::Detection detection = output[i];
-
-            cv::Rect box = detection.box;
-            cv::Scalar color = detection.color;
-            cv::Mat mask = detection.boxMask;
-
-            // Detection box
-            cv::rectangle(yolo_frame, box, color, 2);
-
-            // Detection mask
-            yolo_frame(box).setTo(color, mask);
-
-            // Detection box text
-            std::string classString = detection.className + ' ' + to_string(detection.confidence).substr(0, 4);
-            cv::Size textSize = cv::getTextSize(classString, cv::FONT_HERSHEY_DUPLEX, 1, 2, 0);
-            cv::Rect textBox(box.x, box.y - 40, textSize.width + 10, textSize.height + 20);
-
-            cv::rectangle(yolo_frame, textBox, color, cv::FILLED);
-            cv::putText(yolo_frame, classString, cv::Point(box.x + 5, box.y - 10), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 0, 0), 2, 0);
-        }
-
-        // This is only for preview purposes
-        float scale = 1;
-        //cv::resize(yolo_frame, yolo_frame, cv::Size(yolo_frame.cols*scale, yolo_frame.rows*scale));
-        cv::imshow("yolo inference", yolo_frame);
-
-        //perche queste dimensioni//cout<<"frame size in yolo: "<<endl<<"width: "<<yolo_frame.cols<<" height: "<<yolo_frame.rows<<endl;
-
-        // ==================================
-        */
-        //perche queste dimensioni//cout<<"frame size in viewer.cc: "<<endl<<"width: "<<im.cols<<" height: "<<im.rows<<endl;
 
         if(both){
             cv::Mat imRight = mpFrameDrawer->DrawRightFrame(trackedImageScale);
@@ -442,9 +403,23 @@ void Viewer::Run()
             mpSystem->SaveKeyFrameTrajectoryEuRoC("KeyFrameTrajectory.txt");
             menuStop = false;
 
-            // ===CLOSE CONE COORDINATES LOG FILE======================================== 
+            // ===CLOSE CONE COORDINATES LOG FILE=============================== 
             log_cone_csv_file.close(); 
-            // =========================================================================
+            // =================================================================
+
+            // circuit enhancement postprocessing
+            mpFrameDrawer->circuit.circuitEnhancement();
+
+            // log cone clusters
+            int counter = 0;
+            for(ConeSlam* cone : mpFrameDrawer->circuit.cones){
+                log_cluster_cone_csv_file<<counter<<","<<cone->class_id<<","<<cone->x<<","<<cone->y<<","<<cone->z<<std::endl;
+                counter++;
+            }
+
+            // ===CLOSE CONE CLUSTER COORDINATES LOG FILE======================= 
+            log_cluster_cone_csv_file.close(); 
+            // =================================================================
         }
 
         if(Stop())

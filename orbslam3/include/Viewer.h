@@ -44,7 +44,7 @@ class Viewer
 {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    Viewer(System* pSystem, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings, const string &log_cone_file_path = std::string());
+    Viewer(System* pSystem, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings, const string &log_cone_file_path = std::string(), const string &log_circuit_file_path = std::string());
 
     void newParameterLoader(Settings* settings);
 
@@ -74,6 +74,9 @@ public:
 
     // CONE CSV LOG FILE
     ofstream log_cone_csv_file;
+
+    // CLUSTER CONE CSV LOG FILE
+    ofstream log_cluster_cone_csv_file;
 private:
 
     bool ParseViewerParamFile(cv::FileStorage &fSettings);

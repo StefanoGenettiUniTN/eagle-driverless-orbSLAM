@@ -343,14 +343,16 @@ int main(int argc, char **argv) {
     std::cout << " Model = " << intrinsics_cam.model << std::endl;
 
     // LOG FILES
-    // ** cones.csv :: coordinate of the cones
+    // ** cones.csv :: coordinate of the cones (updated frame by frame)
+    // ** circuit.csv :: coordinate of the unique cones
     // ** camera.csv :: coordinate of the camera
     string log_cone_file_path = "report/cones.csv";
+    string log_circuit_file_path = "report/circuit.csv";
     string log_camera_file_path = "report/camera.csv"; 
     // ...
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD, true, 0, file_name, log_cone_file_path);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD, true, 0, file_name, log_cone_file_path, log_circuit_file_path);
     float imageScale = SLAM.GetImageScale();
 
     double timestamp;

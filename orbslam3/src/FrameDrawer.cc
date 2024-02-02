@@ -18,6 +18,8 @@
 
 #include "FrameDrawer.h"
 #include "Tracking.h"
+#include "ConeSlam.h"
+#include "Circuit.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -381,6 +383,7 @@ cv::Mat FrameDrawer::DrawFrame(YOLO::Inference* yoloModel, float imageScale)
         cv::Rect box = detection.box;
         cv::Scalar color = detection.color;
         cv::Mat mask = detection.boxMask;
+        int class_id = detection.class_id;
 
         // Detection box
         box.x = box.x * 2;
@@ -452,9 +455,11 @@ cv::Mat FrameDrawer::DrawFrame(YOLO::Inference* yoloModel, float imageScale)
             coneCentroid_world[1] = sumMapPointsYCoordinates/cardConePoints;
             coneCentroid_world[2] = sumMapPointsZCoordinates/cardConePoints;
             //cout<<"cone centroid coordinates: x="<<coneCentroid_world[0]<<" y="<<coneCentroid_world[1]<<" z="<<coneCentroid_world[2]<<endl;
+
             {
                 unique_lock<mutex> lock(mMutex);
                 cones.push_back(coneCentroid_world);
+                circuit.addCone(ConeSlam(coneCentroid_world[0], coneCentroid_world[1], coneCentroid_world[2], class_id));
             }
             // compute cone centroid in 3d world coordinates
         }
@@ -681,6 +686,7 @@ void FrameDrawer::Update(Tracking *pTracker)
     mvpOutlierMPs.clear();
     mvpOutlierMPs.reserve(N);
     cones.clear();
+    circuit.removeDuplicates();
 
     if(pTracker->mLastProcessedState==Tracking::NOT_INITIALIZED)
     {

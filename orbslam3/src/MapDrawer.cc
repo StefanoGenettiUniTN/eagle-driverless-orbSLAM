@@ -19,6 +19,8 @@
 #include "MapDrawer.h"
 #include "MapPoint.h"
 #include "KeyFrame.h"
+#include "ConeSlam.h"
+#include "Circuit.h"
 #include <pangolin/pangolin.h>
 #include <mutex>
 
@@ -189,6 +191,46 @@ void MapDrawer::DrawCones(std::vector<Eigen::Vector3f> cones, ofstream* log_cone
         // log cone position in csv file
         // timestamp,x,y,z
         *log_cone_csv_file<<chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now().time_since_epoch()).count()<<","<<c(0)<<","<<c(1)<<","<<c(2)<<"\n";
+    }
+
+    glEnd();
+}
+
+// todo: comment
+void MapDrawer::DrawCones(std::vector<Eigen::Vector3f> cones, Circuit* circuit, ofstream* log_cone_csv_file){
+    glPointSize(mPointSize*5);
+    glBegin(GL_POINTS);
+    glColor3f(1.0,0.6,0.0);
+
+    for(Eigen::Vector3f c : cones){
+        // plot cone position
+        glVertex3f(c(0),c(1),c(2));
+
+        // log cone position in csv file
+        // timestamp,x,y,z
+        *log_cone_csv_file<<chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now().time_since_epoch()).count()<<","<<c(0)<<","<<c(1)<<","<<c(2)<<"\n";
+    }
+
+    glEnd();
+
+    glPointSize(mPointSize*8);
+    glBegin(GL_POINTS);
+
+    for (ConeSlam* cone : circuit->cones) {
+        if(cone->getHitCounter()>5){
+            if (cone->class_id == 0) {  // BLUE
+                glColor3f(0.0, 0.0, 1.0); // Blue color
+            } else if (cone->class_id == 1) {    // LARGE ORANGE
+                glColor3f(1.0, 0.5, 0.0); // Orange color
+            } else if (cone->class_id == 2) {    // RED
+                glColor3f(1.0, 0.0, 0.0); // Red color
+            } else if (cone->class_id == 3) {    // BLACK
+                glColor3f(0.0, 0.0, 0.0); // Black color
+            } else if (cone->class_id == 4) {    // YELLOW
+                glColor3f(1.0, 1.0, 0.0); // Yellow color
+            }
+            glVertex3f(cone->getX(),cone->getY(),cone->getZ());
+        }
     }
 
     glEnd();

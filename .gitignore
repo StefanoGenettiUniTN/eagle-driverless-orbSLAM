@@ -93,3 +93,6 @@ borrar/*
 */ExecMean.txt
 
 .vscode/
+
+execute.sh
+compile.sh

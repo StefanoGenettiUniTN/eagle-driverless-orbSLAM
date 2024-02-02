@@ -39,13 +39,14 @@ namespace ORB_SLAM3
 Verbose::eLevel Verbose::th = Verbose::VERBOSITY_NORMAL;
 
 System::System(const string &strVocFile, const string &strSettingsFile, const eSensor sensor,
-               const bool bUseViewer, const int initFr, const string &strSequence, const string &log_cone_file_path):
+               const bool bUseViewer, const int initFr, const string &strSequence, const string &log_cone_file_path, const string &log_circuit_file_path):
     mSensor(sensor), mpViewer(static_cast<Viewer*>(NULL)), mbReset(false), mbResetActiveMap(false),
     mbActivateLocalizationMode(false), mbDeactivateLocalizationMode(false), mbShutDown(false)
 {
     /*
     Parameters:
-        * const string &log_cone_file_path :: output csv file where we store the coordinates of the cones    
+        * const string &log_cone_file_path :: output csv file where we store the coordinates of the cones
+        * const string &log_circuit_file_path :: output csv file where we store the coordinates of the clustered cones    
     */
 
     // Output welcome message
@@ -234,7 +235,7 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     if(bUseViewer)
     //if(false) // TODO
     {
-        mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile,settings_, log_cone_file_path);
+        mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile,settings_, log_cone_file_path, log_circuit_file_path);
         mptViewer = new thread(&Viewer::Run, mpViewer);
         mpTracker->SetViewer(mpViewer);
         mpLoopCloser->mpViewer = mpViewer;

@@ -22,6 +22,8 @@
 
 #include"Atlas.h"
 #include"MapPoint.h"
+#include "ConeSlam.h"
+#include "Circuit.h"
 #include"KeyFrame.h"
 #include "Settings.h"
 #include<pangolin/pangolin.h>
@@ -47,6 +49,7 @@ public:
 
     void DrawMapPoints();
     void DrawCones(std::vector<Eigen::Vector3f> cones, ofstream* log_cone_csv_file);
+    void DrawCones(std::vector<Eigen::Vector3f> cones, Circuit* circuit, ofstream* log_cone_csv_file);
     void DrawKeyFrames(const bool bDrawKF, const bool bDrawGraph, const bool bDrawInertialGraph, const bool bDrawOptLba);
     void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
     void SetCurrentCameraPose(const Sophus::SE3f &Tcw);
