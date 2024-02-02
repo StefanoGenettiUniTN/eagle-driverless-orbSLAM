@@ -27,6 +27,7 @@
 #include "ORBmatcher.h"
 
 #include "Thirdparty/DBoW2/DUtils/Random.h"
+#include <unistd.h>
 
 namespace ORB_SLAM3
 {

@@ -20,12 +20,12 @@
 #ifndef SIM3SOLVER_H
 #define SIM3SOLVER_H
 
+#include <unistd.h>
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 
 #include "KeyFrame.h"
-
-
 
 namespace ORB_SLAM3
 {

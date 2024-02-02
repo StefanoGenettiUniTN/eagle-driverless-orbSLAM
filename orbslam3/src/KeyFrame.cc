@@ -20,6 +20,7 @@
 #include "Converter.h"
 #include "ImuTypes.h"
 #include<mutex>
+#include <unistd.h>
 
 namespace ORB_SLAM3
 {

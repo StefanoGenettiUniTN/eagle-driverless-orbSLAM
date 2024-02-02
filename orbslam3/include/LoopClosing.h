@@ -20,6 +20,8 @@
 #ifndef LOOPCLOSING_H
 #define LOOPCLOSING_H
 
+#include <unistd.h>
+
 #include "KeyFrame.h"
 #include "LocalMapping.h"
 #include "Atlas.h"

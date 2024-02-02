@@ -29,6 +29,7 @@
 #include <thread>
 #include <include/CameraModels/Pinhole.h>
 #include <include/CameraModels/KannalaBrandt8.h>
+#include <unistd.h>
 
 namespace ORB_SLAM3
 {

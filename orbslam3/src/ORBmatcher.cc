@@ -27,6 +27,8 @@
 
 #include<stdint-gcc.h>
 
+#include <unistd.h>
+
 using namespace std;
 
 namespace ORB_SLAM3

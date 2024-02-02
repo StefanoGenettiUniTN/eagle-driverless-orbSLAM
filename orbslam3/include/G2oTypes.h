@@ -19,6 +19,8 @@
 #ifndef G2OTYPES_H
 #define G2OTYPES_H
 
+#include <unistd.h>
+
 #include "Thirdparty/g2o/g2o/core/base_vertex.h"
 #include "Thirdparty/g2o/g2o/core/base_binary_edge.h"
 #include "Thirdparty/g2o/g2o/types/types_sba.h"

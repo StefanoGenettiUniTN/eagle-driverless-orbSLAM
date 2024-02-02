@@ -20,6 +20,8 @@
 #ifndef OPTIMIZER_H
 #define OPTIMIZER_H
 
+#include <unistd.h>
+
 #include "Map.h"
 #include "MapPoint.h"
 #include "KeyFrame.h"

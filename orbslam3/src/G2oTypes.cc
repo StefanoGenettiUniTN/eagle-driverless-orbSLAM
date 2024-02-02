@@ -19,6 +19,8 @@
 #include "G2oTypes.h"
 #include "ImuTypes.h"
 #include "Converter.h"
+#include <unistd.h>
+
 namespace ORB_SLAM3
 {
 

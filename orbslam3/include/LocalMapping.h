@@ -20,6 +20,7 @@
 #ifndef LOCALMAPPING_H
 #define LOCALMAPPING_H
 
+#include <unistd.h>
 #include "KeyFrame.h"
 #include "Atlas.h"
 #include "LoopClosing.h"

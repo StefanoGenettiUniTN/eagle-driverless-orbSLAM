@@ -20,6 +20,7 @@
 #ifndef FRAME_H
 #define FRAME_H
 
+#include <unistd.h>
 #include<vector>
 
 #include "Thirdparty/DBoW2/DBoW2/BowVector.h"

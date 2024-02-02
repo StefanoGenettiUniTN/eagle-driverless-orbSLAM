@@ -96,3 +96,5 @@ borrar/*
 
 execute.sh
 compile.sh
+CMakeLists.old.txt
+orbslam3/Thirdparty/
